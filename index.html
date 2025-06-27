@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación Especial</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&family=VT323&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: #fff0f0;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 650px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h1 {
+            font-family: 'VT323', monospace;
+            color: #ff0000;
+            font-size: 3rem;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 3px rgba(255, 0, 0, 0.2);
+        }
+
+        .gif-container {
+            margin: 25px auto;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+
+        .gif-container img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .gif-container img:hover {
+            transform: scale(1.05);
+        }
+
+        .message {
+            margin: 20px 0;
+            font-size: 1.3rem;
+            color: #ff0000;
+            font-weight: 600;
+            min-height: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+            height: 50px;
+            width: 100%;
+        }
+
+        button {
+            padding: 12px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(255, 0, 0, 0.1);
+        }
+
+        #si {
+            background: #4CAF50;
+            color: white;
+        }
+
+        #si:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
+            background: #388E3C;
+        }
+
+        #no {
+            background: #9e9e9e;
+            color: white;
+        }
+
+        #no:hover {
+            background: #757575;
+        }
+
+        .heart {
+            position: fixed;
+            pointer-events: none;
+            font-size: 20px;
+            color: red;
+            opacity: 0;
+            animation: fall 5s linear infinite;
+            transform-origin: top center;
+            z-index: 101;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-50px) translateX(var(--heart-x-start)) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) translateX(var(--heart-x-end)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-container {
+            display: none;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .success-container h1 {
+            font-family: 'VT323', monospace;
+            color: #ff0000;
+            font-size: 3.8rem;
+            margin-bottom: 30px;
+        }
+
+        .success-container p {
+            color: #ff0000;
+            font-size: 1.4rem;
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .heart-rain-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        .success-container .gif-container {
+            height: 350px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="invitation-container">
+        <h1>¿Quieres ser mi novia Sofia?</h1>
+        <div class="gif-container" id="main-gif">
+            <img src="https://media1.tenor.com/m/sqMrmFmyejwAAAAC/hug.gif" alt="Comiendo salchichas">
+        </div>
+        <div class="message" id="message"></div>
+        <div class="buttons">
+            <button id="si">¡Claro que sí! ❤️</button>
+            <button id="no">No, gracias</button>
+        </div>
+    </div>
+    <div class="container success-container" id="success-container">
+        <h1>¡Gracias por aceptar! 💕</h1>
+        <div class="gif-container">
+            <img src="https://media.tenor.com/ivlixHuP8r0AAAAj/dudu-dudu-bubu.gif" alt="Celebración" class="floating">
+        </div>
+        <p>Será un momento muy lindo, Te amooo muchooo😊</p>
+    </div>
+    <div class="heart-rain-container" id="heart-rain-container"></div>
+    <script>
+        const siBtn = document.getElementById('si');
+        const noBtn = document.getElementById('no');
+        const mainGif = document.getElementById('main-gif');
+        const message = document.getElementById('message');
+        const invitationContainer = document.getElementById('invitation-container');
+        const successContainer = document.getElementById('success-container');
+        const heartRainContainer = document.getElementById('heart-rain-container');
+        let noAttempts = 0;
+        let heartInterval;
+        const gifs = {
+            tierno: 'https://media.tenor.com/JSkGo2B3op8AAAAM/dirt-alone.gif',
+            triste: 'https://media.tenor.com/lXKKsl6ZSBcAAAAj/dudu-sad.gif',
+            feliz: 'https://media.tenor.com/KNiXTCA36YYAAAAj/bubu-dudu-sseeyall.gif'
+        };
+
+        function moveNoButton() {
+            noAttempts++;
+            if (noAttempts === 1) {
+                mainGif.innerHTML = `<img src="${gifs.tierno}" alt="Tierno">`;
+                message.textContent = 'Por favor, reconsidera tu respuesta...';
+            } else if (noAttempts >= 2) {
+                mainGif.innerHTML = `<img src="${gifs.triste}" alt="Triste">`;
+                message.textContent = '¡Vamos, di que sí! Será muy lindoo 😊';
+            }
+            const buttonWidth = noBtn.offsetWidth;
+            const buttonHeight = noBtn.offsetHeight;
+            const x = Math.random() * (window.innerWidth - buttonWidth);
+            const y = Math.random() * (window.innerHeight - buttonHeight);
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+
+        noBtn.addEventListener('mouseover', moveNoButton);
+
+        noBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        siBtn.addEventListener('mouseover', function() {
+            mainGif.innerHTML = `<img src="${gifs.feliz}" alt="Feliz">`;
+            message.textContent = '¡Sabía que te animarías! 😍';
+        });
+
+        siBtn.addEventListener('click', function() {
+            invitationContainer.style.display = 'none';
+            successContainer.style.display = 'block';
+            startHeartRain();
+        });
+
+        function startHeartRain() {
+            clearInterval(heartInterval);
+            function createFallingHeart() {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.classList.add('heart');
+                const startX = Math.random() * window.innerWidth;
+                const endX = startX + (Math.random() * 200 - 100);
+                heart.style.setProperty('--heart-x-start', `${startX}px`);
+                heart.style.setProperty('--heart-x-end', `${endX}px`);
+                const size = Math.random() * 15 + 15;
+                heart.style.fontSize = `${size}px`;
+                const delay = Math.random() * 2;
+                heart.style.animationDelay = `${delay}s`;
+                const duration = Math.random() * 3 + 4;
+                heart.style.animationDuration = `${duration}s`;
+                heartRainContainer.appendChild(heart);
+                heart.addEventListener('animationend', () => {
+                    heart.remove();
+                });
+            }
+            const numberOfHearts = 150;
+            for (let i = 0; i < numberOfHearts; i++) {
+                setTimeout(createFallingHeart, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
